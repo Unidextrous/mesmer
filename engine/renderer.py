@@ -5,8 +5,11 @@ import numpy as np
 
 
 class Renderer:
-    def __init__(self, vertex_shader_path, fragment_shader_path):
+    def __init__(self, vertex_shader_path, fragment_shader_path, width, height):
         self.ctx = moderngl.create_context()
+
+        self.width = width
+        self.height = height
 
         self._create_quad()
         self._create_shader_program(
@@ -43,5 +46,7 @@ class Renderer:
             ],
         )
 
-    def render(self):
+    def render(self, time, delta_time, frame):
+        self.program["u_resolution"] = (self.width, self.height)
+
         self.vao.render()

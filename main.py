@@ -6,15 +6,23 @@ from engine.renderer import Renderer
 def main():
     pygame.init()
 
-    pygame.display.set_mode(
+    screen = pygame.display.set_mode(
         (0, 0),
         pygame.OPENGL | pygame.DOUBLEBUF | pygame.FULLSCREEN
     )
 
+    width, height = screen.get_size()
+
     renderer = Renderer(
         "shaders/vertex.vert",
         "shaders/fragment.frag",
+        width,
+        height,
     )
+
+    clock = pygame.time.Clock()
+    elapsed_time = 0.0
+    frame = 0
 
     running = True
 
@@ -23,7 +31,10 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        renderer.render()
+        delta_time = clock.tick(60) / 1000.0
+        elapsed_time += delta_time
+
+        renderer.render(elapsed_time, delta_time, frame)
 
         pygame.display.flip()
 
