@@ -4,9 +4,10 @@ import moderngl
 import numpy as np
 
 from .uniforms import UniformManager
+from .parameters import ParameterManager
 
 class Renderer:
-    def __init__(self, vertex_shader_path, fragment_shader_path, width, height):
+    def __init__(self, vertex_shader_path, fragment_shader_path, parameter_path, width, height):
         self.ctx = moderngl.create_context()
 
         self.width = width
@@ -14,6 +15,9 @@ class Renderer:
 
         self.vertex_shader_path = vertex_shader_path
         self.fragment_shader_path = fragment_shader_path
+
+        self.parameter_path = parameter_path
+        self.parameter_manager = ParameterManager(parameter_path)
 
         self._shader_mtimes = {
             vertex_shader_path: Path(vertex_shader_path).stat().st_mtime,
@@ -132,12 +136,16 @@ class Renderer:
         )
 
     def render(self, time, delta_time, frame):
-        values = {
+        self.parameter_manager.check_reload()
+
+        values = dict(self.parameter_manager.values)
+
+        values.update({
             "u_time": time,
             "u_delta_time": delta_time,
             "u_resolution": (self.width, self.height),
             "u_frame": frame,
-        }
+        })
 
         self.uniforms.update(values)
 
