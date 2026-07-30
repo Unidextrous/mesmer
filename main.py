@@ -40,7 +40,7 @@ def main():
                 elif event.key == pygame.K_2:
                     visual_manager.load("spiral")
                 elif event.key == pygame.K_3:
-                    visual_manager.load("wave")
+                    visual_manager.load("noise")
 
         delta_time = clock.tick(60) / 1000.0
         elapsed_time += delta_time

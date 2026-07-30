@@ -1,0 +1,21 @@
+# ---------- Transform ----------
+
+u_offset = [0.0, 0.0]
+
+u_scale = [1.0, 1.0]
+
+
+# ---------- Noise ----------
+
+u_noise_scale = 8.0
+
+u_speed = 0.2
+
+
+# ---------- Appearance ----------
+
+u_color_1 = [0.0, 0.0, 0.2]
+
+u_color_2 = [0.8, 0.9, 1.0]
+
+u_intensity = 1.0

@@ -1,0 +1,12 @@
+name = "Noise"
+category = "Organic"
+author = "Dex Prime"
+version = "1.0"
+
+description = """
+A procedural hash-based noise pattern demonstrating
+deterministic randomness in GLSL.
+"""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"
