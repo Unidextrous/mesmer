@@ -1,0 +1,12 @@
+name = "Kaleidoscope"
+category = "Pattern"
+author = "Dex Prime"
+version = "1.0"
+
+description = """
+A procedural kaleidoscope pattern
+created through polar coordinate folding.
+"""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"

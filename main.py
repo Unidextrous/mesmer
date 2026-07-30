@@ -39,6 +39,8 @@ def main():
                     visual_manager.load("radial_gradient")
                 elif event.key == pygame.K_2:
                     visual_manager.load("spiral")
+                elif event.key == pygame.K_3:
+                    visual_manager.load("kaleidoscope")
 
         delta_time = clock.tick(60) / 1000.0
         elapsed_time += delta_time
