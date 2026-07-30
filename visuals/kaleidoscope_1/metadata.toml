@@ -1,0 +1,13 @@
+name = "Kaleidoscope 1"
+category = "Psychedelic"
+author = "Dex Prime"
+version = "1.0"
+
+description = """
+A layered procedural kaleidoscope pattern
+created through polar coordinate folding
+and multiple interfering wave functions.
+"""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"

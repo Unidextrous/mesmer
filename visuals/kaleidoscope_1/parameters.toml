@@ -1,0 +1,38 @@
+# ---------- Transform ----------
+
+u_offset = [0.0, 0.0]
+
+u_scale = [1.0, 1.0]
+
+u_rotation = 0.0
+
+
+# ---------- Kaleidoscope ----------
+
+u_segments = 5.0
+
+u_radius_frequency = 12.0
+
+u_angle_frequency = 6.0
+
+u_speed = 1.0
+
+
+# ---------- Pattern Layers ----------
+
+u_layer_1_strength = 1.0
+
+u_layer_2_strength = 0.5
+
+u_layer_2_radius_frequency = 25.0
+
+u_layer_2_angle_frequency = 12.0
+
+
+# ---------- Appearance ----------
+
+u_color_1 = [0.0, 0.0, 0.2]
+
+u_color_2 = [0.8, 0.2, 1.0]
+
+u_intensity = 1.0
