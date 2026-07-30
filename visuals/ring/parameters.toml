@@ -1,0 +1,18 @@
+# ---------- Transform ----------
+
+u_offset = [0.0, 0.0]
+u_scale = [1.0, 1.0]
+
+
+# ---------- Ring ----------
+
+u_radius = 0.35
+u_thickness = 0.02
+
+
+# ---------- Appearance ----------
+
+u_color_inside = [0.8, 0.9, 1.0]
+u_color_outside = [0.0, 0.0, 0.2]
+
+u_intensity = 1.0
