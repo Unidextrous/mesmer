@@ -7,28 +7,13 @@ from .uniforms import UniformManager
 from .parameters import ParameterManager
 
 class Renderer:
-    def __init__(self, vertex_shader_path, fragment_shader_path, parameter_path, width, height):
+    def __init__(self, width, height):
         self.ctx = moderngl.create_context()
 
         self.width = width
         self.height = height
 
-        self.vertex_shader_path = vertex_shader_path
-        self.fragment_shader_path = fragment_shader_path
-
-        self.parameter_path = parameter_path
-        self.parameter_manager = ParameterManager(parameter_path)
-
-        self._shader_mtimes = {
-            vertex_shader_path: Path(vertex_shader_path).stat().st_mtime,
-            fragment_shader_path: Path(fragment_shader_path).stat().st_mtime,
-        }
-
         self._create_quad()
-        self._create_shader_program(
-            vertex_shader_path,
-            fragment_shader_path
-        )
 
     def _shaders_changed(self):
         for path in (
@@ -45,6 +30,42 @@ class Renderer:
     def check_shader_reload(self):
         if self._shaders_changed():
             self.reload_shaders()
+
+    def load_visual(
+        self,
+        vertex_shader_path,
+        fragment_shader_path,
+        parameter_path,
+    ):
+        try:
+            self._create_shader_program(
+                vertex_shader_path,
+                fragment_shader_path,
+            )
+
+            self._create_shader_program(
+                vertex_shader_path,
+                fragment_shader_path
+            )
+
+            self.vertex_shader_path = vertex_shader_path
+            self.fragment_shader_path = fragment_shader_path
+
+            self.parameter_manager = ParameterManager(parameter_path)
+
+            self._shader_mtimes = {
+                vertex_shader_path:
+                    Path(vertex_shader_path).stat().st_mtime,
+
+                fragment_shader_path:
+                    Path(fragment_shader_path).stat().st_mtime,
+            }
+
+            print("Visual loaded successfully.")
+
+        except RuntimeError as error:
+            print(error)
+            print("Keeping previous visual.")
 
     def reload_shaders(self):
         try:

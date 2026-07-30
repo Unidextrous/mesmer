@@ -1,6 +1,7 @@
 import pygame
 
 from engine.renderer import Renderer
+from engine.visuals import VisualManager
 
 
 def main():
@@ -13,13 +14,10 @@ def main():
 
     width, height = screen.get_size()
 
-    renderer = Renderer(
-        "visuals/vertex.vert",
-        "visuals/spiral/shader.frag",
-        "visuals/spiral/parameters.toml",
-        width,
-        height,
-    )
+    renderer = Renderer(width, height)
+
+    visual_manager = VisualManager(renderer)
+    visual_manager.load("gradient")
 
     clock = pygame.time.Clock()
     elapsed_time = 0.0
@@ -37,6 +35,11 @@ def main():
                     running = False
                 elif event.key == pygame.K_SPACE:
                     renderer.reload_shaders()
+                elif event.key == pygame.K_1:
+                    visual_manager.load("gradient")
+
+                elif event.key == pygame.K_2:
+                    visual_manager.load("spiral")
 
         delta_time = clock.tick(60) / 1000.0
         elapsed_time += delta_time
