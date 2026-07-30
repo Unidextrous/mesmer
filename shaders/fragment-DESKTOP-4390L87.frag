@@ -1,6 +1,5 @@
 #version 330
 
-uniform float u_time;
 uniform vec2 u_resolution;
 
 out vec4 frag_color;
@@ -13,8 +12,10 @@ void main()
     uv.x *= u_resolution.x / u_resolution.y;
 
     float radius = length(uv);
+    float angle = atan(uv.y, uv.x);
 
-    float brightness = 0.5 + 0.5 * sin(radius * 20.0 - u_time * 2.0);
+    float pattern = sin(radius * 20.0 + angle * 1.0);
+    pattern = pattern * 0.5 + 0.5;
 
-    frag_color = vec4(brightness, brightness, brightness, 1.0);
+    frag_color = vec4(pattern, pattern, pattern, 1.0);
 }
