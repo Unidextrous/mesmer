@@ -41,6 +41,7 @@ def main():
         elapsed_time += delta_time
 
         renderer.render(elapsed_time, delta_time, frame)
+        renderer.check_shader_reload()
 
         pygame.display.flip()
 

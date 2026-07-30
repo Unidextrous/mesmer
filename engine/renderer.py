@@ -14,11 +14,32 @@ class Renderer:
         self.vertex_shader_path = vertex_shader_path
         self.fragment_shader_path = fragment_shader_path
 
+        self._shader_mtimes = {
+            vertex_shader_path: Path(vertex_shader_path).stat().st_mtime,
+            fragment_shader_path: Path(fragment_shader_path).stat().st_mtime,
+        }
+
         self._create_quad()
         self._create_shader_program(
             vertex_shader_path,
             fragment_shader_path
         )
+
+    def _shaders_changed(self):
+        for path in (
+            self.vertex_shader_path,
+            self.fragment_shader_path,
+        ):
+            current_mtime = Path(path).stat().st_mtime
+
+            if current_mtime != self._shader_mtimes[path]:
+                return True
+
+        return False
+
+    def check_shader_reload(self):
+        if self._shaders_changed():
+            self.reload_shaders()
 
     def reload_shaders(self):
         try:
@@ -26,6 +47,14 @@ class Renderer:
                 self.vertex_shader_path,
                 self.fragment_shader_path
             )
+
+            self._shader_mtimes = {
+                self.vertex_shader_path:
+                    Path(self.vertex_shader_path).stat().st_mtime,
+
+                self.fragment_shader_path:
+                    Path(self.fragment_shader_path).stat().st_mtime,
+            }
 
             print("Shaders reloaded successfully.")
 
