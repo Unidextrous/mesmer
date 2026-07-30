@@ -24,8 +24,6 @@ class VisualManager:
 
         self.renderer.load_visual(visual)
 
-        print(f"Loaded visual: {name}")
-
 class Visual:
     def __init__(self, path, default_vertex_shader):
         self.path = Path(path)

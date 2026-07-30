@@ -1,0 +1,12 @@
+name = "Wave"
+category = "Motion"
+author = "Dex Prime"
+version = "1.0"
+
+description = """
+A procedural sine wave demonstrating
+periodic functions and animation.
+"""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"
