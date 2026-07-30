@@ -3,6 +3,7 @@ from pathlib import Path
 import moderngl
 import numpy as np
 
+from .uniforms import UniformManager
 
 class Renderer:
     def __init__(self, vertex_shader_path, fragment_shader_path, width, height):
@@ -95,6 +96,7 @@ class Renderer:
 
 
         self.program = program
+        self.uniforms = UniformManager(self.program)
         self.vao = vao
 
     def _compile_program(
@@ -130,7 +132,13 @@ class Renderer:
         )
 
     def render(self, time, delta_time, frame):
-        self.program["u_time"] = time
-        self.program["u_resolution"] = (self.width, self.height)
+        values = {
+            "u_time": time,
+            "u_delta_time": delta_time,
+            "u_resolution": (self.width, self.height),
+            "u_frame": frame,
+        }
+
+        self.uniforms.update(values)
 
         self.vao.render()
