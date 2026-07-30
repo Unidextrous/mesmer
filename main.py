@@ -14,9 +14,9 @@ def main():
     width, height = screen.get_size()
 
     renderer = Renderer(
-        "shaders/vertex.vert",
-        "shaders/gradient/shader.frag",
-        "shaders/gradient/parameters.toml",
+        "visuals/vertex.vert",
+        "visuals/spiral/shader.frag",
+        "visuals/spiral/parameters.toml",
         width,
         height,
     )

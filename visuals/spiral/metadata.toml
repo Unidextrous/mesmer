@@ -1,0 +1,16 @@
+name = "Spiral"
+category = "Procedural Patterns"
+author = "Dex Prime"
+version = "0.1"
+
+description = """
+A procedural spiral pattern generated from polar coordinates.
+Demonstrates radius and angle based transformations.
+"""
+
+tags = [
+    "spiral",
+    "polar",
+    "trigonometry",
+    "procedural"
+]
