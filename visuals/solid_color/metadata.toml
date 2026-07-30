@@ -1,0 +1,13 @@
+name = "Solid Color"
+category = "Basic"
+author = "Dex Prime"
+version = "1.0"
+
+description = """
+A simple solid color shader.
+Used as the most basic test of
+the visual pipeline and parameters.
+"""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"
