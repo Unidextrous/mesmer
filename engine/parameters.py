@@ -28,4 +28,4 @@ class ParameterManager:
 
             except tomllib.TOMLDecodeError as error:
                 print(error)
-                print("Keeping previous parameters")
+                print("Keeping previous parameter values.")

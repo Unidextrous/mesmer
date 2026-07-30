@@ -1,0 +1,11 @@
+name = "Gradient"
+category = "Basic"
+author = "Dex Prime"
+version = "0.1"
+
+description = """
+A basic procedural gradient demonstrating
+coordinate transforms and color interpolation.
+"""
+
+shader = "shader.frag"

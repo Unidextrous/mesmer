@@ -15,8 +15,8 @@ def main():
 
     renderer = Renderer(
         "shaders/vertex.vert",
-        "shaders/reference/gradient.frag",
-        "shaders/reference/gradient.toml",
+        "shaders/gradient/shader.frag",
+        "shaders/gradient/parameters.toml",
         width,
         height,
     )
