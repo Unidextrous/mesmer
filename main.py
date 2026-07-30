@@ -31,6 +31,12 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                elif event.key == pygame.K_SPACE:
+                    renderer.reload_shaders()
+
         delta_time = clock.tick(60) / 1000.0
         elapsed_time += delta_time
 

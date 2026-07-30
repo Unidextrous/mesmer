@@ -11,11 +11,27 @@ class Renderer:
         self.width = width
         self.height = height
 
+        self.vertex_shader_path = vertex_shader_path
+        self.fragment_shader_path = fragment_shader_path
+
         self._create_quad()
         self._create_shader_program(
             vertex_shader_path,
             fragment_shader_path
         )
+
+    def reload_shaders(self):
+        try:
+            self._create_shader_program(
+                self.vertex_shader_path,
+                self.fragment_shader_path
+            )
+
+            print("Shaders reloaded successfully.")
+
+        except RuntimeError as error:
+            print(error)
+            print("Keeping previous shader.")
 
     def _create_quad(self):
         vertices = np.array([
@@ -34,19 +50,23 @@ class Renderer:
         vertex_source = Path(vertex_shader_path).read_text()
         fragment_source = Path(fragment_shader_path).read_text()
 
-        self.program = self._compile_program(
+        program = self._compile_program(
             vertex_source,
             fragment_source,
             vertex_shader_path,
             fragment_shader_path,
         )
 
-        self.vao = self.ctx.vertex_array(
-            self.program,
+        vao = self.ctx.vertex_array(
+            program,
             [
                 (self.vbo, "2f", "in_position"),
             ],
         )
+
+
+        self.program = program
+        self.vao = vao
 
     def _compile_program(
         self,
