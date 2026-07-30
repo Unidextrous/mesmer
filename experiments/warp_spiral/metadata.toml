@@ -1,0 +1,12 @@
+name = "Warped Spiral"
+category = "Procedural"
+author = "Dex Prime"
+version = "1.0"
+
+description = """
+A spiral pattern distorted through
+noise-based domain warping.
+"""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"

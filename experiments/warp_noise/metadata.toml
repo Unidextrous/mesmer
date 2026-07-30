@@ -1,0 +1,13 @@
+name = "Warped Noise"
+category = "Organic"
+author = "Dex Prime"
+
+version = "1.0"
+
+description = """
+Demonstrates coordinate distortion using
+noise-based domain warping.
+"""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"
