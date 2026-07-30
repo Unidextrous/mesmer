@@ -1,0 +1,12 @@
+name = "Circle"
+category = "Geometric"
+author = "Dex Prime"
+version = "1.0"
+
+description = """
+A signed distance field circle demonstrating
+distance-based thresholding with step().
+"""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"

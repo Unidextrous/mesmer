@@ -42,6 +42,10 @@ def main():
                 elif event.key == pygame.K_3:
                     visual_manager.load("radial_gradient")
                 elif event.key == pygame.K_4:
+                    visual_manager.load("checkerboard")
+                elif event.key == pygame.K_5:
+                    visual_manager.load("circle")
+                elif event.key == pygame.K_6:
                     visual_manager.load("spiral")
 
         delta_time = clock.tick(60) / 1000.0

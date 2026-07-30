@@ -1,0 +1,12 @@
+name = "Checkerboard"
+category = "Patterns"
+author = "Dex Prime"
+version = "1.0"
+
+description = """
+A repeating checkerboard pattern using
+grid coordinates and modular arithmetic.
+"""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"
