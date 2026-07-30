@@ -8,4 +8,5 @@ A basic procedural gradient demonstrating
 coordinate transforms and color interpolation.
 """
 
-shader = "shader.frag"
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"

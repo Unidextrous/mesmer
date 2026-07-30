@@ -31,41 +31,26 @@ class Renderer:
         if self._shaders_changed():
             self.reload_shaders()
 
-    def load_visual(
-        self,
-        vertex_shader_path,
-        fragment_shader_path,
-        parameter_path,
-    ):
-        try:
-            self._create_shader_program(
-                vertex_shader_path,
-                fragment_shader_path,
-            )
+    def load_visual(self, visual):
+        self.vertex_shader_path = visual.vertex_shader
+        self.fragment_shader_path = visual.fragment_shader
 
-            self._create_shader_program(
-                vertex_shader_path,
-                fragment_shader_path
-            )
+        self.parameter_manager = ParameterManager(visual.parameter_file)
 
-            self.vertex_shader_path = vertex_shader_path
-            self.fragment_shader_path = fragment_shader_path
+        self._create_shader_program(
+            self.vertex_shader_path,
+            self.fragment_shader_path
+        )
 
-            self.parameter_manager = ParameterManager(parameter_path)
+        self._shader_mtimes = {
+            self.vertex_shader_path:
+                Path(self.vertex_shader_path).stat().st_mtime,
 
-            self._shader_mtimes = {
-                vertex_shader_path:
-                    Path(vertex_shader_path).stat().st_mtime,
+            self.fragment_shader_path:
+                Path(self.fragment_shader_path).stat().st_mtime,
+        }
 
-                fragment_shader_path:
-                    Path(fragment_shader_path).stat().st_mtime,
-            }
-
-            print("Visual loaded successfully.")
-
-        except RuntimeError as error:
-            print(error)
-            print("Keeping previous visual.")
+        print(f"Loaded visual: {visual.name}")
 
     def reload_shaders(self):
         try:

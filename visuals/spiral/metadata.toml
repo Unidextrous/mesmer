@@ -14,3 +14,6 @@ tags = [
     "trigonometry",
     "procedural"
 ]
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"
