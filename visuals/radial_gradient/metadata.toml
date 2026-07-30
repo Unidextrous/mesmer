@@ -1,0 +1,12 @@
+name = "Radial Gradient"
+category = "Pattern"
+author = "Dex Prime"
+version = "1.0"
+
+description = """
+A distance-based gradient centered around
+the origin using a signed distance field.
+"""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"
