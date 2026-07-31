@@ -1,0 +1,11 @@
+name = "Plasma"
+category = "Organic"
+author = "Dex Prime"
+version = "1.0"
+
+description = """
+An animated procedural plasma field created
+by combining multiple sine waves."""
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"
