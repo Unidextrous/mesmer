@@ -5,14 +5,20 @@ version = "0.1"
 
 description = """
 A procedural spiral pattern generated from polar coordinates.
-Demonstrates radius and angle based transformations.
+
+Uses radial and angular frequency to create animated spiral geometry.
+Supports multiple fill modes including sine-based waves and defined spiral bands.
 """
 
 tags = [
     "spiral",
     "polar",
     "trigonometry",
-    "procedural"
+    "procedural",
+    "animation",
+    "hypnotic",
+    "radial",
+    "generative"
 ]
 
 fragment_shader = "shader.frag"

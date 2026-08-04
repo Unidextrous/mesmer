@@ -17,7 +17,7 @@ def main():
     renderer = Renderer(width, height)
 
     visual_manager = VisualManager(renderer, "visuals", "visuals/default_vertex.vert")
-    visual_manager.load("solid_color")
+    visual_manager.load("spiral")
 
     clock = pygame.time.Clock()
     elapsed_time = 0.0
@@ -36,7 +36,7 @@ def main():
                 elif event.key == pygame.K_SPACE:
                     renderer.reload_shaders()
                 elif event.key == pygame.K_1:
-                    visual_manager.load("radial_gradient")
+                    visual_manager.load("spiral")
                 elif event.key == pygame.K_2:
                     visual_manager.load("plasma")
 

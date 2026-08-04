@@ -1,18 +1,17 @@
 #version 330
 
 //============================================================
-// Spiral Reference Shader
+// Spiral Visual
 //
 // Demonstrates:
 // - Polar coordinates
-// - Radius calculations
-// - Angle calculations
-// - Procedural patterns
-// - Animation through phase shifting
-// - Coordinate transforms
+// - Procedural spiral generation
+// - Radial and angular frequency
+// - Multiple fill modes
+// - Edge control
+// - Animated phase shifting
 //
 //============================================================
-
 
 //------------------------------------------------------------
 // Engine Uniforms
@@ -32,15 +31,31 @@ uniform vec2  u_offset;
 uniform float u_rotation;
 uniform vec2  u_scale;
 
-
 //------------------------------------------------------------
-// Spiral Geometry
+// Geometry
 //------------------------------------------------------------
 
 uniform float u_radius_frequency;
-uniform float u_angle_frequency;
+uniform float u_arm_count;
+
+
+//------------------------------------------------------------
+// Animation
+//------------------------------------------------------------
 
 uniform float u_rotation_speed;
+
+
+//------------------------------------------------------------
+// Fill
+//------------------------------------------------------------
+
+uniform int u_fill_mode;
+uniform float u_arm_width;
+
+uniform float u_edge_softness;
+uniform float u_leading_edge_softness;
+uniform float u_trailing_edge_softness;
 
 
 //------------------------------------------------------------
@@ -56,17 +71,32 @@ uniform float u_intensity;
 out vec4 frag_color;
 
 
+//------------------------------------------------------------
+// Constants
+//------------------------------------------------------------
+
+const float PI = 3.14159265358979323846;
+
+
+//============================================================
+// Main
+//============================================================
+
 void main()
 {
     //--------------------------------------------------------
     // Coordinate System
     //--------------------------------------------------------
 
-    vec2 uv = gl_FragCoord.xy / u_resolution;
+    vec2 uv =
+        gl_FragCoord.xy /
+        u_resolution;
 
     uv -= 0.5;
 
-    uv.x *= u_resolution.x / u_resolution.y;
+    uv.x *=
+        u_resolution.x /
+        u_resolution.y;
 
 
     //--------------------------------------------------------
@@ -75,12 +105,14 @@ void main()
 
     uv -= u_offset;
 
-    mat2 rotation = mat2(
-        cos(u_rotation),
-       -sin(u_rotation),
-        sin(u_rotation),
-        cos(u_rotation)
-    );
+    mat2 rotation =
+        mat2(
+            cos(u_rotation),
+           -sin(u_rotation),
+
+            sin(u_rotation),
+            cos(u_rotation)
+        );
 
     uv = rotation * uv;
 
@@ -88,51 +120,114 @@ void main()
 
 
     //--------------------------------------------------------
-    // Polar Coordinates
+    // Geometry
     //--------------------------------------------------------
 
-    float radius = length(uv);
+    float radius =
+        length(uv);
 
-    float angle = atan(uv.y, uv.x);
-
-
-    //--------------------------------------------------------
-    // Spiral Pattern
-    //--------------------------------------------------------
-
-    float spiral =
-        sin(
-            radius * u_radius_frequency
-            +
-            angle * u_angle_frequency
-            -
-            u_time * u_rotation_speed
+    float angle =
+        atan(
+            uv.y,
+            uv.x
         );
 
 
     //--------------------------------------------------------
-    // Convert to 0-1 range
+    // Phase
     //--------------------------------------------------------
 
-    float pattern = step(0.0, spiral);
+    float phase =
+        radius * u_radius_frequency
+        +
+        angle * u_arm_count
+        -
+        u_time * u_rotation_speed;
 
+
+    //--------------------------------------------------------
+    // Spiral Position
+    //--------------------------------------------------------
+
+    float arm_position =
+        fract(
+            phase / (2.0 * PI)
+        );
+
+    //--------------------------------------------------------
+    // Sine Fill
+    //--------------------------------------------------------
+
+
+    float pattern = 0.0;
+
+
+    if (u_fill_mode == 0)
+    {
+        float fill =
+            sin(phase);
+
+        pattern =
+            smoothstep(
+                -u_edge_softness,
+                u_edge_softness,
+                fill
+            );
+    }
+
+
+    //--------------------------------------------------------
+    // Bands Fill
+    //--------------------------------------------------------
+
+
+    else if (u_fill_mode == 1)
+    {
+
+        float leading =
+            smoothstep(
+                0.0,
+                u_leading_edge_softness,
+                arm_position
+            );
+
+
+        float trailing =
+            1.0 -
+            smoothstep(
+                u_arm_width,
+                u_arm_width + u_trailing_edge_softness,
+                arm_position
+            );
+
+
+        pattern =
+            leading *
+            trailing;
+    }
 
     //--------------------------------------------------------
     // Color
     //--------------------------------------------------------
 
-    vec3 color = mix(
-        u_color_1,
-        u_color_2,
-        pattern
-    );
+    vec3 color =
+        mix(
+            u_color_1,
+            u_color_2,
+            pattern
+        );
 
-    color *= u_intensity;
+    color *=
+        u_intensity;
 
 
     //--------------------------------------------------------
     // Output
     //--------------------------------------------------------
 
-    frag_color = vec4(color, 1.0);
+    frag_color =
+        vec4(
+            color,
+            1.0
+        );
 }
