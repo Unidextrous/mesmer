@@ -17,7 +17,7 @@ def main():
     renderer = Renderer(width, height)
 
     visual_manager = VisualManager(renderer, "visuals", "visuals/default_vertex.vert")
-    visual_manager.load("spiral")
+    visual_manager.load("gradient")
 
     clock = pygame.time.Clock()
     elapsed_time = 0.0

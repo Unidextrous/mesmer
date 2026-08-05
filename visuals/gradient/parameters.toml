@@ -18,9 +18,15 @@ u_invert = false
 
 u_exponent = 1.0
 
-# ---------- Appearance ----------
+# ---------- Palette ----------
 
-u_color_1 = [0.0, 0.0, 0.2]
-u_color_2 = [0.8, 0.9, 1.0]
+u_palette_size = 2
+
+u_palette_0 = [0.0, 0.0, 0.0]
+u_palette_1 = [1.0, 1.0, 1.0]
+u_palette_2 = [1.0, 0.0, 0.0]
+u_palette_3 = [1.0, 1.0, 0.0]
+
+# ---------- Appearance ----------
 
 u_intensity = 1.0
