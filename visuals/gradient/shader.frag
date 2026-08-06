@@ -1,5 +1,12 @@
 #version 330
 
+
+#include "engine_uniforms.glsl"
+#include "coordinates.glsl"
+#include "transform.glsl"
+#include "palette.glsl"
+
+
 //============================================================
 // Gradient Reference Shader
 //
@@ -15,18 +22,6 @@
 // - Color interpolation
 //
 //============================================================
-
-
-//------------------------------------------------------------
-// Engine Uniforms
-//------------------------------------------------------------
-
-uniform float u_time;
-uniform float u_delta_time;
-uniform vec2  u_resolution;
-uniform int   u_frame;
-
-#include "coordinates.glsl"
 
 
 //------------------------------------------------------------
@@ -59,18 +54,6 @@ uniform float u_exponent;
 
 
 //------------------------------------------------------------
-// Palette
-//------------------------------------------------------------
-
-uniform int u_palette_size;
-
-uniform vec3 u_palette_0;
-uniform vec3 u_palette_1;
-uniform vec3 u_palette_2;
-uniform vec3 u_palette_3;
-
-
-//------------------------------------------------------------
 // Appearance
 //------------------------------------------------------------
 
@@ -80,72 +63,6 @@ uniform float u_intensity;
 out vec4 frag_color;
 
 
-//------------------------------------------------------------
-// Palette Sampling
-//------------------------------------------------------------
-
-vec3 sample_palette(float t)
-{
-    t = clamp(t, 0.0, 1.0);
-
-    if (u_palette_size <= 1)
-    {
-        return u_palette_0;
-    }
-
-    if (u_palette_size == 2)
-    {
-        return mix(
-            u_palette_0,
-            u_palette_1,
-            t
-        );
-    }
-
-    if (u_palette_size == 3)
-    {
-        if (t < 0.5)
-        {
-            return mix(
-                u_palette_0,
-                u_palette_1,
-                t * 2.0
-            );
-        }
-
-        return mix(
-            u_palette_1,
-            u_palette_2,
-            (t - 0.5) * 2.0
-        );
-    }
-
-
-    if (t < 1.0 / 3.0)
-    {
-        return mix(
-            u_palette_0,
-            u_palette_1,
-            t * 3.0
-        );
-    }
-
-    if (t < 2.0 / 3.0)
-    {
-        return mix(
-            u_palette_1,
-            u_palette_2,
-            (t - 1.0 / 3.0) * 3.0
-        );
-    }
-
-    return mix(
-        u_palette_2,
-        u_palette_3,
-        (t - 2.0 / 3.0) * 3.0
-    );
-}
-
 void main()
 {
     //--------------------------------------------------------
@@ -153,23 +70,12 @@ void main()
     //--------------------------------------------------------
 
     vec2 uv = get_uv();
-
-
-    //--------------------------------------------------------
-    // Transform
-    //--------------------------------------------------------
-
-    uv -= u_offset;
-
-    mat2 rotation = mat2(
-        cos(u_rotation), -sin(u_rotation),
-        sin(u_rotation),  cos(u_rotation)
+    uv = apply_transform(
+        uv,
+        u_offset,
+        u_rotation,
+        u_scale
     );
-
-    uv = rotation * uv;
-
-    uv /= u_scale;
-
 
     //--------------------------------------------------------
     // Linear Gradient
