@@ -25,23 +25,24 @@ vec3 sample_palette(float t)
         return u_palette[0];
     }
 
-    float position =
+    float scaled =
         t * float(u_palette_size - 1);
-    
-    int index =
-        int(floor(position));
-    
-    index = min(
-        index,
-        u_palette_size - 2
-    );
-    
-    float fraction =
-        fract(position);
+
+    int lower =
+        int(scaled);
+
+    int upper =
+        min(
+            lower + 1,
+            u_palette_size - 1
+        );
+
+    float blend =
+        fract(scaled);
 
     return mix(
-        u_palette[index],
-        u_palette[index + 1],
-        fraction
+        u_palette[lower],
+        u_palette[upper],
+        blend
     );
 }
