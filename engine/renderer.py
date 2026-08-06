@@ -3,6 +3,7 @@ from pathlib import Path
 import moderngl
 import numpy as np
 
+from .shader_loader import load_shader
 from .uniforms import UniformManager
 from .parameters import ParameterManager
 
@@ -87,8 +88,8 @@ class Renderer:
         self.vbo = self.ctx.buffer(vertices.tobytes())
 
     def _create_shader_program(self, vertex_shader_path, fragment_shader_path):
-        vertex_source = Path(vertex_shader_path).read_text()
-        fragment_source = Path(fragment_shader_path).read_text()
+        vertex_source = load_shader(vertex_shader_path)
+        fragment_source = load_shader(fragment_shader_path)
 
         program = self._compile_program(
             vertex_source,

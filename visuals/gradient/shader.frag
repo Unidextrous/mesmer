@@ -26,6 +26,8 @@ uniform float u_delta_time;
 uniform vec2  u_resolution;
 uniform int   u_frame;
 
+#include "coordinates.glsl"
+
 
 //------------------------------------------------------------
 // Transform
@@ -150,10 +152,7 @@ void main()
     // Coordinate System
     //--------------------------------------------------------
 
-    vec2 uv = gl_FragCoord.xy / u_resolution;
-
-    uv -= 0.5;
-    uv.x *= u_resolution.x / u_resolution.y;
+    vec2 uv = get_uv();
 
 
     //--------------------------------------------------------
