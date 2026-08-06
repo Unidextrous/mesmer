@@ -6,6 +6,7 @@ import numpy as np
 from .shader_loader import load_shader
 from .uniforms import UniformManager
 from .parameters import ParameterManager
+from .palette import PaletteManager
 
 class Renderer:
     def __init__(self, width, height):
@@ -37,6 +38,10 @@ class Renderer:
         self.fragment_shader_path = visual.fragment_shader
 
         self.parameter_manager = ParameterManager(visual.parameter_file)
+
+        self.palette_manager = PaletteManager(
+            self.parameter_manager.palettes
+        )
 
         self._create_shader_program(
             self.vertex_shader_path,
@@ -155,5 +160,9 @@ class Renderer:
         })
 
         self.uniforms.update(values)
+
+        self.uniforms.set_palette(
+            self.palette_manager.colors
+        )
 
         self.vao.render()

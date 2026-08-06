@@ -7,7 +7,9 @@ class ParameterManager:
         self.parameter_path = Path(parameter_path)
 
         self._mtime = None
+
         self.values = {}
+        self.palettes = {}
 
         self.reload()
 
@@ -15,7 +17,16 @@ class ParameterManager:
         with self.parameter_path.open("rb") as file:
             new_parameters = tomllib.load(file)
 
-        self.values = new_parameters
+        self.values = {}
+        self.palettes = {}
+        for name, value in new_parameters.items():
+
+            if name == "u_palette":
+                self.palettes[name] = value
+
+            else:
+                self.values[name] = value
+
         self._mtime = self.parameter_path.stat().st_mtime
 
     def check_reload(self):
