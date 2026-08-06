@@ -11,6 +11,7 @@ const int MAX_PALETTE_SIZE = 8;
 
 uniform int u_palette_size;
 uniform vec3 u_palette[MAX_PALETTE_SIZE];
+uniform int u_palette_mode;
 
 //------------------------------------------------------------
 // Palette Sampling
@@ -23,6 +24,20 @@ vec3 sample_palette(float t)
     if (u_palette_size <= 1)
     {
         return u_palette[0];
+    }
+
+    if (u_palette_mode == 1)
+    {
+        float scaled =
+            t * float(u_palette_size);
+
+        int index =
+            min(
+                int(floor(scaled)),
+                u_palette_size - 1
+            );
+
+        return u_palette[index];
     }
 
     float scaled =
