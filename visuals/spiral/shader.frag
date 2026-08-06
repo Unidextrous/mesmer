@@ -1,5 +1,10 @@
 #version 330
 
+#include "engine_uniforms.glsl"
+#include "coordinates.glsl"
+#include "transform.glsl"
+#include "palette.glsl"
+
 //============================================================
 // Spiral Visual
 //
@@ -12,15 +17,6 @@
 // - Animated phase shifting
 //
 //============================================================
-
-//------------------------------------------------------------
-// Engine Uniforms
-//------------------------------------------------------------
-
-uniform float u_time;
-uniform float u_delta_time;
-uniform vec2  u_resolution;
-uniform int   u_frame;
 
 
 //------------------------------------------------------------
@@ -62,9 +58,6 @@ uniform float u_trailing_edge_softness;
 // Appearance
 //------------------------------------------------------------
 
-uniform vec3 u_color_1;
-uniform vec3 u_color_2;
-
 uniform float u_intensity;
 
 
@@ -88,35 +81,13 @@ void main()
     // Coordinate System
     //--------------------------------------------------------
 
-    vec2 uv =
-        gl_FragCoord.xy /
-        u_resolution;
-
-    uv -= 0.5;
-
-    uv.x *=
-        u_resolution.x /
-        u_resolution.y;
-
-
-    //--------------------------------------------------------
-    // Transform
-    //--------------------------------------------------------
-
-    uv -= u_offset;
-
-    mat2 rotation =
-        mat2(
-            cos(u_rotation),
-           -sin(u_rotation),
-
-            sin(u_rotation),
-            cos(u_rotation)
-        );
-
-    uv = rotation * uv;
-
-    uv /= u_scale;
+    vec2 uv = get_uv();
+    uv = apply_transform(
+        uv,
+        u_offset,
+        u_rotation,
+        u_scale
+    );
 
 
     //--------------------------------------------------------
@@ -211,11 +182,7 @@ void main()
     //--------------------------------------------------------
 
     vec3 color =
-        mix(
-            u_color_1,
-            u_color_2,
-            pattern
-        );
+        sample_palette(pattern);
 
     color *=
         u_intensity;

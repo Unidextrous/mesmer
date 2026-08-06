@@ -23,9 +23,15 @@ u_edge_softness = 0.5
 u_leading_edge_softness = 0.5
 u_trailing_edge_softness = 0.5
 
-# ---------- Appearance ----------
+# ---------- Palette ----------
 
-u_color_1 = [0.0, 0.0, 0.0]
-u_color_2 = [1.0, 1.0, 1.0]
+u_palette_size = 4
+
+u_palette_0 = [0.835, 0.176, 0.0]
+u_palette_1 = [0.937, 0.463, 0.153]
+u_palette_2 = [0.820, 0.384, 0.643]
+u_palette_3 = [0.639, 0.008, 0.384]
+
+# ---------- Appearance ----------
 
 u_intensity = 1.0
