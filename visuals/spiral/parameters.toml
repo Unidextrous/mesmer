@@ -37,3 +37,16 @@ u_palette_mode = 1
 # ---------- Appearance ----------
 
 u_intensity = 1.0
+
+# ---------- Iris Transition ----------
+
+u_transition_progress = 0.5
+
+u_iris_offset = [0.0, 0.0]
+u_iris_max_radius = 1.0
+u_iris_edge_softness = 0.02
+
+u_iris_color = [0.0, 0.0, 0.0]
+u_iris_opacity = 1.0
+
+u_iris_direction = 0

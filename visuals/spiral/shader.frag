@@ -5,6 +5,8 @@
 #include "transform.glsl"
 #include "palette.glsl"
 
+#include "transitions/iris.glsl"
+
 //============================================================
 // Spiral Visual
 //
@@ -189,12 +191,13 @@ void main()
 
 
     //--------------------------------------------------------
-    // Output
+    // Iris Transition
     //--------------------------------------------------------
 
     frag_color =
-        vec4(
-            color,
-            1.0
+        apply_iris(
+            vec4(color, 1.0),
+            uv
         );
+        
 }
