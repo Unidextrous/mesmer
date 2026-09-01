@@ -16,6 +16,7 @@ class Renderer:
         self.height = height
 
         self._create_quad()
+        self._create_framebuffer()
 
     def _shaders_changed(self):
         for path in (
@@ -91,6 +92,16 @@ class Renderer:
         ], dtype="f4")
 
         self.vbo = self.ctx.buffer(vertices.tobytes())
+
+    def _create_framebuffer(self):
+        self.color_texture = self.ctx.texture(
+            (self.width, self.height),
+            4,
+        )
+
+        self.framebuffer = self.ctx.framebuffer(
+            color_attachments=[self.color_texture]
+        )
 
     def _create_shader_program(self, vertex_shader_path, fragment_shader_path):
         vertex_source = load_shader(vertex_shader_path)
