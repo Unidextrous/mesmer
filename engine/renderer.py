@@ -17,6 +17,7 @@ class Renderer:
 
         self._create_quad()
         self._create_framebuffer()
+        self._create_display_program()
 
     def _shaders_changed(self):
         for path in (
@@ -103,6 +104,32 @@ class Renderer:
             color_attachments=[self.color_texture]
         )
 
+    def _create_display_program(self):
+        vertex_source = load_shader(
+            "engine/shaders/display.vert"
+        )
+
+        fragment_source = load_shader(
+            "engine/shaders/display.frag"
+        )
+
+        program = self._compile_program(
+            vertex_source,
+            fragment_source,
+            "engine/shaders/display.vert",
+            "engine/shaders/display.frag",
+        )
+
+        vao = self.ctx.vertex_array(
+            program,
+            [
+                (self.vbo, "2f", "in_position"),
+            ],
+        )
+
+        self.display_program = program
+        self.display_vao = vao
+
     def _create_shader_program(self, vertex_shader_path, fragment_shader_path):
         vertex_source = load_shader(vertex_shader_path)
         fragment_source = load_shader(fragment_shader_path)
@@ -176,4 +203,14 @@ class Renderer:
             self.palette_manager.colors
         )
 
+        self.framebuffer.use()
+
         self.vao.render()
+
+        self.ctx.screen.use()
+
+        self.color_texture.use(location=0)
+
+        self.display_program["u_texture"] = 0
+        
+        self.display_vao.render()
