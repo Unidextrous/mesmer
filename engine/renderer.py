@@ -129,6 +129,9 @@ class Renderer:
 
         self.display_program = program
         self.display_vao = vao
+        self.display_uniforms = UniformManager(
+            self.display_program
+        )
 
     def _create_shader_program(self, vertex_shader_path, fragment_shader_path):
         vertex_source = load_shader(vertex_shader_path)
@@ -188,6 +191,8 @@ class Renderer:
     def render(self, time, delta_time, frame):
         self.parameter_manager.check_reload()
 
+        self.parameter_manager.update(delta_time)
+
         values = dict(self.parameter_manager.values)
 
         values.update({
@@ -198,6 +203,7 @@ class Renderer:
         })
         
         self.uniforms.update(values)
+        self.display_uniforms.update(values)
 
         self.uniforms.set_palette(
             self.palette_manager.colors
@@ -212,5 +218,5 @@ class Renderer:
         self.color_texture.use(location=0)
 
         self.display_program["u_texture"] = 0
-        
+
         self.display_vao.render()

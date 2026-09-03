@@ -37,7 +37,8 @@ u_intensity = 1.0
 
 # ---------- Iris Transition ----------
 
-u_transition_progress = 0.5
+u_transition_progress = 1.0
+
 
 u_iris_offset = [0.0, 0.0]
 u_iris_max_radius = 1.0
