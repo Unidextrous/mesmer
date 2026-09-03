@@ -36,9 +36,21 @@ def main():
                 elif event.key == pygame.K_SPACE:
                     renderer.reload_shaders()
                 elif event.key == pygame.K_1:
-                    visual_manager.load("spiral")
+                    renderer.parameter_manager.load_preset(
+                        "visuals/spiral/presets/default.toml"
+                    )
                 elif event.key == pygame.K_2:
-                    visual_manager.load("plasma")
+                    renderer.parameter_manager.load_preset(
+                        "visuals/spiral/presets/reverse.toml"
+                    )
+                elif event.key == pygame.K_3:
+                    renderer.parameter_manager.load_preset(
+                        "visuals/spiral/presets/light.toml"
+                    )
+                elif event.key == pygame.K_4:
+                    renderer.parameter_manager.load_preset(
+                        "visuals/spiral/presets/dark.toml"
+                    )
 
         delta_time = clock.tick(60) / 1000.0
         elapsed_time += delta_time

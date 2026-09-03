@@ -98,3 +98,26 @@ class ParameterManager:
 
             else:
                 self.values[name] = target
+
+    def load_preset(self, preset_path):
+        preset_path = Path(preset_path)
+
+        with preset_path.open("rb") as file:
+            new_parameters = tomllib.load(file)
+
+        new_values = {}
+        new_palettes = {}
+
+        for name, value in new_parameters.items():
+
+            if name == "u_palette":
+                new_palettes[name] = value
+
+            else:
+                new_values[name] = value
+
+        self.start_values = self.values.copy()
+        self.target_values = new_values
+        self.palettes = new_palettes
+
+        self.transition_time = 0.0
