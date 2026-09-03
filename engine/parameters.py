@@ -99,7 +99,7 @@ class ParameterManager:
             else:
                 self.values[name] = target
 
-    def load_preset(self, preset_path):
+    def load_preset(self, preset_path, duration=1.0):
         preset_path = Path(preset_path)
 
         with preset_path.open("rb") as file:
@@ -120,4 +120,5 @@ class ParameterManager:
         self.target_values = new_values
         self.palettes = new_palettes
 
+        self.transition_duration = duration
         self.transition_time = 0.0
