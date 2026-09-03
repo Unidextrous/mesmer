@@ -5,8 +5,6 @@
 #include "transform.glsl"
 #include "palette.glsl"
 
-#include "transitions/iris.glsl"
-
 //============================================================
 // Spiral Visual
 //
@@ -48,10 +46,8 @@ uniform float u_rotation_speed;
 // Fill
 //------------------------------------------------------------
 
-uniform int u_fill_mode;
 uniform float u_arm_width;
 
-uniform float u_edge_softness;
 uniform float u_leading_edge_softness;
 uniform float u_trailing_edge_softness;
 
@@ -135,49 +131,26 @@ void main()
     float pattern = 0.0;
 
 
-    if (u_fill_mode == 0)
-    {
-        float fill =
-            sin(phase);
-
-        pattern =
-            smoothstep(
-                -u_edge_softness,
-                u_edge_softness,
-                fill
-            );
-    }
+    float leading =
+        smoothstep(
+            0.0,
+            u_leading_edge_softness,
+            arm_position
+        );
 
 
-    //--------------------------------------------------------
-    // Bands Fill
-    //--------------------------------------------------------
+    float trailing =
+        1.0 -
+        smoothstep(
+            u_arm_width,
+            u_arm_width + u_trailing_edge_softness,
+            arm_position
+        );
 
 
-    else if (u_fill_mode == 1)
-    {
-
-        float leading =
-            smoothstep(
-                0.0,
-                u_leading_edge_softness,
-                arm_position
-            );
-
-
-        float trailing =
-            1.0 -
-            smoothstep(
-                u_arm_width,
-                u_arm_width + u_trailing_edge_softness,
-                arm_position
-            );
-
-
-        pattern =
-            leading *
-            trailing;
-    }
+    pattern =
+        leading *
+        trailing;
 
     //--------------------------------------------------------
     // Color
@@ -191,13 +164,12 @@ void main()
 
 
     //--------------------------------------------------------
-    // Iris Transition
+    // Output
     //--------------------------------------------------------
 
     frag_color =
-        apply_iris(
-            vec4(color, 1.0),
-            uv
+        vec4(
+            color,
+            1.0
         );
-        
 }
