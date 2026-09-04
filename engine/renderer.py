@@ -2,6 +2,7 @@ from pathlib import Path
 
 import moderngl
 import numpy as np
+import math
 
 from .shader_loader import load_shader
 from .uniforms import UniformManager
@@ -14,6 +15,8 @@ class Renderer:
 
         self.width = width
         self.height = height
+
+        self.phase = 0.0
 
         self._create_quad()
         self._create_framebuffer()
@@ -193,6 +196,14 @@ class Renderer:
 
         self.parameter_manager.update(delta_time)
 
+        phase_speed = self.parameter_manager.values.get(
+            "u_cycle_speed",
+            0.0
+        )
+
+        self.phase += phase_speed * delta_time
+        self.phase %= 2.0 * math.pi
+
         values = dict(self.parameter_manager.values)
 
         values.update({
@@ -200,6 +211,7 @@ class Renderer:
             "u_delta_time": delta_time,
             "u_resolution": (self.width, self.height),
             "u_frame": frame,
+            "u_phase": self.phase,
         })
         
         self.uniforms.update(values)
