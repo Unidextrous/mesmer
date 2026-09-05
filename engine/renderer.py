@@ -9,6 +9,8 @@ from .uniforms import UniformManager
 from .parameters import ParameterManager
 from .palette import PaletteManager
 
+from transitions.iris.iris import Iris
+
 class Renderer:
     def __init__(self, width, height):
         self.ctx = moderngl.create_context()
@@ -21,6 +23,8 @@ class Renderer:
         self._create_quad()
         self._create_framebuffer()
         self._create_display_program()
+
+        self.iris = Iris()
 
     def _shaders_changed(self):
         for path in (
@@ -196,6 +200,8 @@ class Renderer:
 
         self.parameter_manager.update(delta_time)
 
+        self.iris.update(delta_time)
+
         phase_speed = self.parameter_manager.values.get(
             "u_cycle_speed",
             0.0
@@ -216,6 +222,10 @@ class Renderer:
         
         self.uniforms.update(values)
         self.display_uniforms.update(values)
+
+        self.display_uniforms.update(
+            self.iris.get_uniforms()
+        )
 
         self.uniforms.set_palette(
             self.palette_manager.colors

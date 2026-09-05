@@ -36,21 +36,12 @@ def main():
                 elif event.key == pygame.K_SPACE:
                     renderer.reload_shaders()
                 elif event.key == pygame.K_1:
-                    renderer.parameter_manager.load_preset(
-                        "visuals/spiral/presets/default.toml"
-                    )
+                    renderer.iris.start(direction=1)
                 elif event.key == pygame.K_2:
                     renderer.parameter_manager.load_preset(
-                        "visuals/spiral/presets/reverse.toml"
+                        "visuals/spiral/presets/ripple.toml", 0.0
                     )
-                elif event.key == pygame.K_3:
-                    renderer.parameter_manager.load_preset(
-                        "visuals/spiral/presets/light.toml"
-                    )
-                elif event.key == pygame.K_4:
-                    renderer.parameter_manager.load_preset(
-                        "visuals/spiral/presets/dark.toml"
-                    )
+                    renderer.iris.start(direction=0)
 
         delta_time = clock.tick(60) / 1000.0
         elapsed_time += delta_time

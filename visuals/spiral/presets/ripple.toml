@@ -6,12 +6,12 @@ u_scale = [1.0, 1.0]
 
 # ---------- Geometry ----------
 
-u_radius_frequency = -20.0
-u_arm_count = 5
+u_radius_frequency = 20.0
+u_arm_count = 0
 
 # ---------- Animation ----------
 
-u_cycle_speed = -1.0
+u_cycle_speed = 3.2
 
 # ---------- Fill ----------
 
