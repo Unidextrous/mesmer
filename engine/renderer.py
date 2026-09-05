@@ -4,10 +4,9 @@ import moderngl
 import numpy as np
 import math
 
-from .shader_loader import load_shader
 from .uniforms import UniformManager
-from .parameters import ParameterManager
-from .palette import PaletteManager
+from .shader_loader import load_shader
+from .visuals import VisualInstance
 
 from transitions.iris.iris import Iris
 
@@ -21,72 +20,29 @@ class Renderer:
         self.phase = 0.0
 
         self._create_quad()
-        self._create_framebuffer()
+        self._create_framebuffers()
         self._create_display_program()
 
         self.iris = Iris()
 
-    def _shaders_changed(self):
-        for path in (
-            self.vertex_shader_path,
-            self.fragment_shader_path,
-        ):
-            current_mtime = Path(path).stat().st_mtime
-
-            if current_mtime != self._shader_mtimes[path]:
-                return True
-
-        return False
-
-    def check_shader_reload(self):
-        if self._shaders_changed():
-            self.reload_shaders()
-
     def load_visual(self, visual):
-        self.vertex_shader_path = visual.vertex_shader
-        self.fragment_shader_path = visual.fragment_shader
-
-        self.parameter_manager = ParameterManager(visual.parameter_file)
-
-        self.palette_manager = PaletteManager(
-            self.parameter_manager.palettes
+        self.current_visual_instance = VisualInstance(
+            self.ctx,
+            self.vbo,
+            visual,
         )
 
-        self._create_shader_program(
-            self.vertex_shader_path,
-            self.fragment_shader_path
+        print(f"Loaded current visual: {visual.name}")
+
+    def load_next_visual(self, visual, preset_path=None):
+        self.next_visual_instance = VisualInstance(
+            self.ctx,
+            self.vbo,
+            visual,
+            preset_path
         )
 
-        self._shader_mtimes = {
-            self.vertex_shader_path:
-                Path(self.vertex_shader_path).stat().st_mtime,
-
-            self.fragment_shader_path:
-                Path(self.fragment_shader_path).stat().st_mtime,
-        }
-
-        print(f"Loaded visual: {visual.name}")
-
-    def reload_shaders(self):
-        try:
-            self._create_shader_program(
-                self.vertex_shader_path,
-                self.fragment_shader_path
-            )
-
-            self._shader_mtimes = {
-                self.vertex_shader_path:
-                    Path(self.vertex_shader_path).stat().st_mtime,
-
-                self.fragment_shader_path:
-                    Path(self.fragment_shader_path).stat().st_mtime,
-            }
-
-            print("Shaders reloaded successfully.")
-
-        except RuntimeError as error:
-            print(error)
-            print("Keeping previous shader.")
+        print(f"Loaded next visual: {visual.name}")
 
     def _create_quad(self):
         vertices = np.array([
@@ -101,14 +57,23 @@ class Renderer:
 
         self.vbo = self.ctx.buffer(vertices.tobytes())
 
-    def _create_framebuffer(self):
-        self.color_texture = self.ctx.texture(
+    def _create_framebuffers(self):
+        self.current_texture = self.ctx.texture(
             (self.width, self.height),
             4,
         )
 
-        self.framebuffer = self.ctx.framebuffer(
-            color_attachments=[self.color_texture]
+        self.current_framebuffer = self.ctx.framebuffer(
+            color_attachments=[self.current_texture]
+        )
+
+        self.next_texture = self.ctx.texture(
+            (self.width, self.height),
+            4,
+        )
+
+        self.next_framebuffer = self.ctx.framebuffer(
+            color_attachments=[self.next_texture]
         )
 
     def _create_display_program(self):
@@ -139,29 +104,6 @@ class Renderer:
         self.display_uniforms = UniformManager(
             self.display_program
         )
-
-    def _create_shader_program(self, vertex_shader_path, fragment_shader_path):
-        vertex_source = load_shader(vertex_shader_path)
-        fragment_source = load_shader(fragment_shader_path)
-
-        program = self._compile_program(
-            vertex_source,
-            fragment_source,
-            vertex_shader_path,
-            fragment_shader_path,
-        )
-
-        vao = self.ctx.vertex_array(
-            program,
-            [
-                (self.vbo, "2f", "in_position"),
-            ],
-        )
-
-
-        self.program = program
-        self.uniforms = UniformManager(self.program)
-        self.vao = vao
 
     def _compile_program(
         self,
@@ -196,13 +138,18 @@ class Renderer:
         )
 
     def render(self, time, delta_time, frame):
-        self.parameter_manager.check_reload()
+        self.current_visual_instance.check_shader_reload()
+        self.next_visual_instance.check_shader_reload()
 
-        self.parameter_manager.update(delta_time)
+        self.current_visual_instance.parameter_manager.check_reload()
+        self.next_visual_instance.parameter_manager.check_reload()
+
+        self.current_visual_instance.parameter_manager.update(delta_time)
+        self.next_visual_instance.parameter_manager.update(delta_time)
 
         self.iris.update(delta_time)
 
-        phase_speed = self.parameter_manager.values.get(
+        phase_speed = self.current_visual_instance.parameter_manager.values.get(
             "u_cycle_speed",
             0.0
         )
@@ -210,7 +157,9 @@ class Renderer:
         self.phase += phase_speed * delta_time
         self.phase %= 2.0 * math.pi
 
-        values = dict(self.parameter_manager.values)
+        values = dict(
+            self.current_visual_instance.parameter_manager.values
+        )
 
         values.update({
             "u_time": time,
@@ -220,24 +169,26 @@ class Renderer:
             "u_phase": self.phase,
         })
         
-        self.uniforms.update(values)
+        self.current_visual_instance.uniforms.update(values)
         self.display_uniforms.update(values)
 
         self.display_uniforms.update(
             self.iris.get_uniforms()
         )
 
-        self.uniforms.set_palette(
-            self.palette_manager.colors
+        self.current_visual_instance.uniforms.set_palette(
+            self.current_visual_instance.palette_manager.colors
         )
 
-        self.framebuffer.use()
+        self.current_framebuffer.use()
+        self.current_visual_instance.render(values)
 
-        self.vao.render()
+        self.next_framebuffer.use()
+        self.next_visual_instance.render(values)
 
         self.ctx.screen.use()
 
-        self.color_texture.use(location=0)
+        self.current_texture.use(location=0)
 
         self.display_program["u_texture"] = 0
 

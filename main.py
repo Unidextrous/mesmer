@@ -16,8 +16,18 @@ def main():
 
     renderer = Renderer(width, height)
 
-    visual_manager = VisualManager(renderer, "visuals", "visuals/default_vertex.vert")
+    visual_manager = VisualManager(
+        renderer,
+        "visuals",
+        "visuals/default_vertex.vert"
+    )
+
     visual_manager.load("spiral")
+
+    visual_manager.load_next(
+        "spiral",
+        "visuals/spiral/presets/reverse.toml"
+    )
 
     clock = pygame.time.Clock()
     elapsed_time = 0.0
@@ -34,22 +44,21 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     running = False
                 elif event.key == pygame.K_SPACE:
-                    renderer.reload_shaders()
+                    renderer.current_visual_instance.reload_shaders()
+                    renderer.next_visual_instance.reload_shaders()
                 elif event.key == pygame.K_1:
                     renderer.iris.start(direction=1)
                 elif event.key == pygame.K_2:
-                    renderer.parameter_manager.load_preset(
-                        "visuals/spiral/presets/ripple.toml", 0.0
-                    )
                     renderer.iris.start(direction=0)
 
         delta_time = clock.tick(60) / 1000.0
         elapsed_time += delta_time
 
         renderer.render(elapsed_time, delta_time, frame)
-        renderer.check_shader_reload()
 
         pygame.display.flip()
+
+        frame += 1
 
     pygame.quit()
 
