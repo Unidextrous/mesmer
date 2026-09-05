@@ -1,118 +1,134 @@
-    //------------------------------------------------------------
-    // Iris Transition
-    //------------------------------------------------------------
+//------------------------------------------------------------
+// Iris Transition
+//------------------------------------------------------------
 
-    uniform float u_transition_progress;
+uniform float u_transition_progress;
 
-    uniform vec2  u_iris_offset;
-    uniform float u_iris_max_radius;
-    uniform float u_iris_edge_softness;
+uniform vec2  u_iris_offset;
+uniform float u_iris_max_radius;
+uniform float u_iris_edge_softness;
 
-    uniform vec3  u_iris_color;
-    uniform float u_iris_opacity;
-
-    uniform int   u_iris_direction;
-
-    uniform int u_iris_active;
+uniform int u_iris_direction;
+uniform int u_iris_active;
 
 
-    //------------------------------------------------------------
-    // Apply Iris
-    //
-    // Direction:
-    //     0 = IN
-    //     1 = OUT
-    //
-    // Progress:
-    //     0.0 → transition beginning
-    //     1.0 → transition complete
-    //------------------------------------------------------------
+//------------------------------------------------------------
+// Apply Iris
+//
+// Direction:
+//     0 = IN
+//     1 = OUT
+//
+// Progress:
+//     0.0 → transition beginning
+//     1.0 → transition complete
+//
+// IN:
+//     Next visual is revealed through a growing circle.
+//
+// OUT:
+//     Current visual is revealed over the next visual
+//     through a shrinking circle.
+//------------------------------------------------------------
 
-    vec4 apply_iris(
-        vec4 color,
-        vec2 uv
-    )
+vec4 apply_iris(
+    vec4 current_color,
+    vec4 next_color,
+    vec2 uv
+)
+{
+    //--------------------------------------------------------
+    // No transition
+    //--------------------------------------------------------
+
+    if (u_iris_active == 0)
     {
-        //--------------------------------------------------------
-        // Check active status
-        //--------------------------------------------------------
+        return current_color;
+    }
 
 
-        if (u_iris_active == 0)
-        {
-            return color;
-        }
+    //--------------------------------------------------------
+    // Position
+    //--------------------------------------------------------
+
+    vec2 position =
+        uv - u_iris_offset;
 
 
-        //--------------------------------------------------------
-        // Direction
-        //--------------------------------------------------------
+    //--------------------------------------------------------
+    // Distance from iris center
+    //--------------------------------------------------------
 
-        float progress =
-            u_transition_progress;
-
-        if (u_iris_direction == 1)
-        {
-            progress =
-                1.0 - progress;
-        }
+    float distance =
+        length(position);
 
 
-        //--------------------------------------------------------
-        // Position
-        //--------------------------------------------------------
+    //--------------------------------------------------------
+    // Aperture radius
+    //--------------------------------------------------------
 
-        vec2 position =
-            uv - u_iris_offset;
-
-
-        //--------------------------------------------------------
-        // Distance
-        //--------------------------------------------------------
-
-        float distance =
-            length(position);
+    float radius =
+        u_iris_max_radius *
+        u_transition_progress;
 
 
-        //--------------------------------------------------------
-        // Aperture
-        //--------------------------------------------------------
+    //--------------------------------------------------------
+    // Calculate edge
+    //--------------------------------------------------------
 
-        float radius =
-            u_iris_max_radius *
-            progress;
+    float edge;
 
-
-        //--------------------------------------------------------
-        // Edge
-        //--------------------------------------------------------
-
-        float edge =
+    if (u_iris_edge_softness <= 0.0)
+    {
+        edge =
+            step(
+                radius,
+                distance
+            );
+    }
+    else
+    {
+        edge =
             smoothstep(
                 radius - u_iris_edge_softness,
                 radius + u_iris_edge_softness,
                 distance
             );
-
-
-        //--------------------------------------------------------
-        // Transition Color
-        //--------------------------------------------------------
-
-        vec3 output_color =
-            mix(
-                color.rgb,
-                u_iris_color,
-                edge * u_iris_opacity
-            );
-
-
-        //--------------------------------------------------------
-        // Output
-        //--------------------------------------------------------
-
-        return vec4(
-            output_color,
-            color.a
-        );
     }
+
+
+    //--------------------------------------------------------
+    // Convert edge to aperture mask
+    //
+    // Inside circle:
+    //     mask = 1
+    //
+    // Outside circle:
+    //     mask = 0
+    //--------------------------------------------------------
+
+    float mask =
+        1.0 - edge;
+
+
+    //--------------------------------------------------------
+    // OUT reverses the aperture
+    //--------------------------------------------------------
+
+    if (u_iris_direction == 1)
+    {
+        mask =
+            1.0 - mask;
+    }
+
+
+    //--------------------------------------------------------
+    // Composite
+    //--------------------------------------------------------
+
+    return mix(
+        current_color,
+        next_color,
+        mask
+    );
+}

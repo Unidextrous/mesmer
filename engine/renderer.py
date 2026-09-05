@@ -157,20 +157,27 @@ class Renderer:
         self.phase += phase_speed * delta_time
         self.phase %= 2.0 * math.pi
 
-        values = dict(
-            self.current_visual_instance.parameter_manager.values
-        )
-
-        values.update({
+        global_values = {
             "u_time": time,
             "u_delta_time": delta_time,
             "u_resolution": (self.width, self.height),
             "u_frame": frame,
             "u_phase": self.phase,
-        })
+        }
+
+        current_values = dict(
+            self.current_visual_instance.parameter_manager.values
+        )
+
+        current_values.update(global_values)
+
+        next_values = dict(
+            self.next_visual_instance.parameter_manager.values
+        )
+
+        next_values.update(global_values)
         
-        self.current_visual_instance.uniforms.update(values)
-        self.display_uniforms.update(values)
+        self.display_uniforms.update(global_values)
 
         self.display_uniforms.update(
             self.iris.get_uniforms()
@@ -181,15 +188,17 @@ class Renderer:
         )
 
         self.current_framebuffer.use()
-        self.current_visual_instance.render(values)
+        self.current_visual_instance.render(current_values)
 
         self.next_framebuffer.use()
-        self.next_visual_instance.render(values)
+        self.next_visual_instance.render(next_values)
 
         self.ctx.screen.use()
 
         self.current_texture.use(location=0)
+        self.next_texture.use(location=1)
 
-        self.display_program["u_texture"] = 0
+        self.display_program["u_current_texture"] = 0
+        self.display_program["u_next_texture"] = 1
 
         self.display_vao.render()
