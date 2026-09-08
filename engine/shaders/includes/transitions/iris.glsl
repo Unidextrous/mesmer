@@ -67,9 +67,20 @@ vec4 apply_iris(
     // Aperture radius
     //--------------------------------------------------------
 
-    float radius =
-        u_iris_max_radius *
-        u_transition_progress;
+    float radius;
+
+    if (u_iris_direction == 1)
+    {
+        radius =
+            u_iris_max_radius *
+            (1.0 - u_transition_progress);
+    }
+    else
+    {
+        radius =
+            u_iris_max_radius *
+            u_transition_progress;
+    }
 
 
     //--------------------------------------------------------
@@ -110,6 +121,15 @@ vec4 apply_iris(
     float mask =
         1.0 - edge;
 
+
+    //--------------------------------------------------------
+    // OUT reverses the aperture
+    //--------------------------------------------------------
+
+    if (u_iris_direction == 1)
+    {
+        mask = 1.0 - mask;
+    }
 
 
     //--------------------------------------------------------

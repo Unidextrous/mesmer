@@ -59,14 +59,26 @@ def main():
                     )
                     renderer.iris.start(direction=0)
                 elif event.key == pygame.K_3:
+                    visual_manager.load_next(
+                        "solid_color",
+                        "visuals/solid_color/presets/default.toml"
+                    )
+                    renderer.iris.start(direction=1)
+                elif event.key == pygame.K_4:
+                    visual_manager.load_next(
+                        "spiral",
+                        "visuals/spiral/presets/ripple.toml"
+                    )
+                    renderer.iris.start(direction=0)
+                elif event.key == pygame.K_5:
                     renderer.current_visual_instance.parameter_manager.load_preset(
                         "visuals/spiral/presets/default.toml"
                     )
-                elif event.key == pygame.K_4:
+                elif event.key == pygame.K_6:
                     renderer.current_visual_instance.parameter_manager.load_preset(
                         "visuals/spiral/presets/light.toml"
                     )
-                elif event.key == pygame.K_5:
+                elif event.key == pygame.K_7:
                     renderer.current_visual_instance.parameter_manager.load_preset(
                         "visuals/spiral/presets/dark.toml"
                     )
