@@ -47,9 +47,29 @@ def main():
                     renderer.current_visual_instance.reload_shaders()
                     renderer.next_visual_instance.reload_shaders()
                 elif event.key == pygame.K_1:
-                    renderer.iris.start(direction=1)
-                elif event.key == pygame.K_2:
+                    visual_manager.load_next(
+                        "spiral",
+                        "visuals/spiral/presets/default.toml"
+                    )
                     renderer.iris.start(direction=0)
+                elif event.key == pygame.K_2:
+                    visual_manager.load_next(
+                        "spiral",
+                        "visuals/spiral/presets/reverse.toml"
+                    )
+                    renderer.iris.start(direction=0)
+                elif event.key == pygame.K_3:
+                    renderer.current_visual_instance.parameter_manager.load_preset(
+                        "visuals/spiral/presets/default.toml"
+                    )
+                elif event.key == pygame.K_4:
+                    renderer.current_visual_instance.parameter_manager.load_preset(
+                        "visuals/spiral/presets/light.toml"
+                    )
+                elif event.key == pygame.K_5:
+                    renderer.current_visual_instance.parameter_manager.load_preset(
+                        "visuals/spiral/presets/dark.toml"
+                    )
 
         delta_time = clock.tick(60) / 1000.0
         elapsed_time += delta_time

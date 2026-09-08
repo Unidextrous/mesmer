@@ -39,6 +39,7 @@ uniform float u_arm_count;
 // Animation
 //------------------------------------------------------------
 
+uniform float u_phase_direction;
 uniform float u_cycle_speed;
 uniform float u_phase;
 
@@ -112,7 +113,7 @@ void main()
         +
         angle * u_arm_count
         -
-        u_phase;
+        u_phase * u_phase_direction;
 
 
     //--------------------------------------------------------

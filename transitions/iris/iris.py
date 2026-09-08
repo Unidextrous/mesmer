@@ -26,13 +26,16 @@ class Iris:
 
     def update(self, delta_time):
         if not self.active:
-            return
+            return False
 
         self.progress += delta_time / self.duration
 
         if self.progress >= 1.0:
             self.progress = 1.0
             self.active = False
+            return True
+
+        return False
 
     def get_uniforms(self):
         return {
@@ -45,3 +48,6 @@ class Iris:
             "u_iris_direction": self.direction,
             "u_iris_active": 1 if self.active else 0,
         }
+
+    def finish(self):
+        self.active = False

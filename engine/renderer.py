@@ -137,6 +137,27 @@ class Renderer:
             for i, line in enumerate(source.splitlines(), start=1)
         )
 
+    def _complete_transition(self):
+        self.current_visual_instance, self.next_visual_instance = (
+            self.next_visual_instance,
+            self.current_visual_instance,
+        )
+
+        self.current_texture, self.next_texture = (
+            self.next_texture,
+            self.current_texture,
+        )
+
+        self.current_framebuffer, self.next_framebuffer = (
+            self.next_framebuffer,
+            self.current_framebuffer,
+        )
+
+        print(
+            f"Transition complete. "
+            f"Current visual: {self.current_visual_instance.visual.name}"
+        )
+
     def render(self, time, delta_time, frame):
         self.current_visual_instance.check_shader_reload()
         self.next_visual_instance.check_shader_reload()
@@ -147,7 +168,7 @@ class Renderer:
         self.current_visual_instance.parameter_manager.update(delta_time)
         self.next_visual_instance.parameter_manager.update(delta_time)
 
-        self.iris.update(delta_time)
+        transition_complete = self.iris.update(delta_time)
 
         phase_speed = self.current_visual_instance.parameter_manager.values.get(
             "u_cycle_speed",
@@ -195,6 +216,9 @@ class Renderer:
 
         self.ctx.screen.use()
 
+        if transition_complete:
+            self._complete_transition()
+            
         self.current_texture.use(location=0)
         self.next_texture.use(location=1)
 

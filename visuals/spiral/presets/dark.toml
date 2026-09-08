@@ -11,6 +11,7 @@ u_arm_count = 5
 
 # ---------- Animation ----------
 
+u_phase_direction = 1.0
 u_cycle_speed = 1.0
 
 # ---------- Fill ----------
