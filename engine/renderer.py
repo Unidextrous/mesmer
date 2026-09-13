@@ -18,6 +18,7 @@ class Renderer:
         self.height = height
 
         self.phase = 0.0
+        self.phase_speed = 4.0
 
         self._create_quad()
         self._create_framebuffers()
@@ -170,12 +171,7 @@ class Renderer:
 
         transition_complete = self.iris.update(delta_time)
 
-        phase_speed = self.current_visual_instance.parameter_manager.values.get(
-            "u_cycle_speed",
-            0.0
-        )
-
-        self.phase += phase_speed * delta_time
+        self.phase += self.phase_speed * delta_time
         self.phase %= 2.0 * math.pi
 
         global_values = {

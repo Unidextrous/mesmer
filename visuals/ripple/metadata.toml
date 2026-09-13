@@ -1,0 +1,25 @@
+name = "Ripple"
+category = "Psychedelic"
+author = "Dex Prime"
+version = "0.1"
+
+description = """
+A procedural ripple pattern generated from polar coordinates.
+
+Uses radial and angular frequency to create animate ripple geometry.
+Supports multiple fill modes including sine-based waves and defined ripple bands.
+"""
+
+tags = [
+    "ripple",
+    "polar",
+    "trigonometry",
+    "procedural",
+    "animation",
+    "hypnotic",
+    "radial",
+    "generative"
+]
+
+fragment_shader = "shader.frag"
+parameters = "parameters.toml"

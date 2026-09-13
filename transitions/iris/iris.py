@@ -6,7 +6,7 @@ class Iris:
         edge_softness=0.0,
         color=(0.0, 0.0, 0.0),
         opacity=1.0,
-        duration=6.25,
+        duration=5.0,
     ):
         self.offset = offset
         self.max_radius = max_radius

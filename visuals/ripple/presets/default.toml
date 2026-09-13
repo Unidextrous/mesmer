@@ -1,0 +1,36 @@
+# ---------- Transform ----------
+
+u_offset = [0.0, 0.0]
+u_rotation = 0.0
+u_scale = [1.0, 1.0]
+
+# ---------- Geometry ----------
+
+u_radius_frequency = 20.0
+
+# ---------- Animation ----------
+
+u_phase_direction = 1.0
+u_cycle_speed = 4.0
+
+# ---------- Fill ----------
+
+u_arm_width = 0.5
+
+u_leading_edge_softness = 0.0
+u_trailing_edge_softness = 0.0
+
+# ---------- Palette ----------
+
+u_palette_size = 2
+
+u_palette = [
+    [0.0, 0.0, 0.0],
+    [1.0, 1.0, 1.0],
+]
+
+u_palette_mode = 0
+
+# ---------- Appearance ----------
+
+u_intensity = 1.0

@@ -4,6 +4,19 @@ from engine.renderer import Renderer
 from engine.visuals import VisualManager
 
 
+def load_preset(renderer, preset_name):
+    visual_name = renderer.current_visual_instance.visual.name
+
+    preset_path = (
+        f"visuals/{visual_name}/presets/{preset_name}.toml"
+    )
+
+    print(preset_path)
+
+    renderer.current_visual_instance.parameter_manager.load_preset(
+        preset_path
+    )
+
 def main():
     pygame.init()
 
@@ -66,22 +79,16 @@ def main():
                     renderer.iris.start(direction=1)
                 elif event.key == pygame.K_4:
                     visual_manager.load_next(
-                        "spiral",
-                        "visuals/spiral/presets/ripple.toml"
+                        "ripple",
+                        "visuals/ripple/presets/light.toml"
                     )
                     renderer.iris.start(direction=0)
                 elif event.key == pygame.K_5:
-                    renderer.current_visual_instance.parameter_manager.load_preset(
-                        "visuals/spiral/presets/default.toml"
-                    )
+                    load_preset(renderer, "default")
                 elif event.key == pygame.K_6:
-                    renderer.current_visual_instance.parameter_manager.load_preset(
-                        "visuals/spiral/presets/light.toml"
-                    )
+                    load_preset(renderer, "light")
                 elif event.key == pygame.K_7:
-                    renderer.current_visual_instance.parameter_manager.load_preset(
-                        "visuals/spiral/presets/dark.toml"
-                    )
+                    load_preset(renderer, "dark")
 
         delta_time = clock.tick(60) / 1000.0
         elapsed_time += delta_time
