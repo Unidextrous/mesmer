@@ -89,6 +89,15 @@ def main():
                     load_preset(renderer, "light")
                 elif event.key == pygame.K_7:
                     load_preset(renderer, "dark")
+                elif event.key == pygame.K_8:
+                    visual_manager.load_next(
+                        "spiral",
+                        "visuals/spiral/presets/reverse.toml"
+                    )
+                    renderer.iris.start(
+                        direction=1,
+                        target_progress=0.5
+                    )
 
         delta_time = clock.tick(60) / 1000.0
         elapsed_time += delta_time

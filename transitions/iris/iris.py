@@ -18,11 +18,14 @@ class Iris:
         self.progress = 0.0
         self.direction = 0
         self.active = False
+        self.enabled = False
 
-    def start(self, direction=0):
+    def start(self, direction=0, target_progress=1.0):
         self.direction = direction
         self.progress = 0.0
+        self.target_progress = target_progress
         self.active = True
+        self.enabled = True
 
     def update(self, delta_time):
         if not self.active:
@@ -30,10 +33,14 @@ class Iris:
 
         self.progress += delta_time / self.duration
 
-        if self.progress >= 1.0:
-            self.progress = 1.0
+        if self.progress >= self.target_progress:
+            self.progress = self.target_progress
             self.active = False
-            return True
+
+            if self.target_progress >= 1.0:
+                return True
+
+            return False
 
         return False
 
@@ -46,8 +53,9 @@ class Iris:
             "u_iris_color": self.color,
             "u_iris_opacity": self.opacity,
             "u_iris_direction": self.direction,
-            "u_iris_active": 1 if self.active else 0,
+            "u_iris_active": 1 if self.enabled else 0,
         }
 
     def finish(self):
         self.active = False
+        self.enabled = False

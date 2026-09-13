@@ -212,11 +212,12 @@ class Renderer:
 
         self.ctx.screen.use()
 
-        if transition_complete:
-            self._complete_transition()
-            
         self.current_texture.use(location=0)
         self.next_texture.use(location=1)
+
+        if transition_complete:
+            self._complete_transition()
+            self.iris.finish()
 
         self.display_program["u_current_texture"] = 0
         self.display_program["u_next_texture"] = 1

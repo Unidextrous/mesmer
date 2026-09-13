@@ -6,8 +6,8 @@ u_scale = [1.0, 1.0]
 
 # ---------- Geometry ----------
 
-u_radius_frequency = 20.0
-u_arm_count = 5
+u_radius_frequency = 100.0
+u_arm_count = 20
 
 # ---------- Animation ----------
 
