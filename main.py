@@ -73,26 +73,38 @@ def main():
                     renderer.iris.start(direction=0)
                 elif event.key == pygame.K_3:
                     visual_manager.load_next(
+                        "spiral",
+                        "visuals/spiral/presets/20.toml"
+                    )
+                    renderer.iris.start(direction=0)
+                elif event.key == pygame.K_3:
+                    visual_manager.load_next(
+                        "spiral",
+                        "visuals/spiral/presets/reverse_20.toml"
+                    )
+                    renderer.iris.start(direction=0)
+                elif event.key == pygame.K_4:
+                    visual_manager.load_next(
                         "solid_color",
                         "visuals/solid_color/presets/default.toml"
                     )
                     renderer.iris.start(direction=1)
-                elif event.key == pygame.K_4:
+                elif event.key == pygame.K_5:
                     visual_manager.load_next(
                         "ripple",
                         "visuals/ripple/presets/light.toml"
                     )
                     renderer.iris.start(direction=0)
-                elif event.key == pygame.K_5:
-                    load_preset(renderer, "default")
                 elif event.key == pygame.K_6:
-                    load_preset(renderer, "light")
+                    load_preset(renderer, "default")
                 elif event.key == pygame.K_7:
-                    load_preset(renderer, "dark")
+                    load_preset(renderer, "light")
                 elif event.key == pygame.K_8:
+                    load_preset(renderer, "dark")
+                elif event.key == pygame.K_9:
                     visual_manager.load_next(
                         "spiral",
-                        "visuals/spiral/presets/reverse.toml"
+                        "visuals/spiral/presets/reverse_20.toml"
                     )
                     renderer.iris.start(
                         direction=1,
